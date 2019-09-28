@@ -38,11 +38,11 @@ namespace EditableDataTable
             this.Dock = DockStyle.Fill;
             this.DoubleBuffered = true;
             this.ColumnCount = 1;
-            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetDouble;
+            this.CellBorderStyle = TableLayoutPanelCellBorderStyle.None;
             this.AutoScroll = true;
             this.RowCount = 2;
             this.RowStyles.Add(new RowStyle(SizeType.Percent,15));
-            this.RowStyles.Add(new RowStyle(SizeType.Percent, 85));
+            this.RowStyles.Add(new RowStyle(SizeType.Percent,82));
 
             _totalColumns = new HashSet<string>();
 
@@ -67,18 +67,18 @@ namespace EditableDataTable
             childPanel = new TableLayoutPanel();
             childPanel.Dock = DockStyle.Fill;
             childPanel.ColumnCount = _totalColumns.Count + 1;
-            childPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5));
-            childPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.OutsetDouble;
+            childPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+            childPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             childPanel.AutoScroll = true;
             childPanel.RowCount = 1;
-            childPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+            childPanel.RowStyles.Add(new RowStyle(SizeType.Percent));
             
             for (int i = 0; i < _totalColumns.Count; i++)
             {
-                childPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5));
+                childPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
                 childPanel.Controls.Add(new Label
                 {
-                    Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0))),
+                    Font = new Font("Microsoft Sans Serif", 8F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0))),
                     Size = new Size(70, 25),
                     Dock = DockStyle.Fill,
                     Text = _totalColumns.ElementAt(i)
@@ -87,106 +87,14 @@ namespace EditableDataTable
             }
 
             var actionslabel = new Label();
-            actionslabel.Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
+            actionslabel.Font = new Font("Microsoft Sans Serif", 8F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0)));
             actionslabel.Size = new Size(70, 25);
             actionslabel.Text = "Actiones";
-
+			childPanel.Controls.Add(actionslabel, 0,0);
            this.Controls.Add(childPanel, 0, 1);
 
         }
 
-   
-        //private void button1_Click(object sender, EventArgs e)
-        //{
-        //  
-        //}
-
-        //private void button2_Click(object sender, EventArgs e)
-        //{
-        // 
-        //}
-
-        //private void button3_Click(object sender, EventArgs e)
-        //{
-        //    using (var conexion = new SQLiteConnection(Recurso.Cadena))
-        //    {
-        //        try
-        //        {
-        //            var query = new StringBuilder();
-        //            query.Append(" SELECT  ");
-        //            query.Append("Id,Nombre,Appellidos");
-        //            query.Append(" FROM MITABLA ");
-        //            query.Append(" WHERE Id=@Id ");
-        //            using (var commando = new SQLiteCommand(query.ToString(), conexion))
-        //            {
-        //                commando.Parameters.AddWithValue("@Id", textBoxID.Text);
-        //                conexion.Open();
-        //                var reader = commando.ExecuteReader();
-        //                if (reader.HasRows)
-        //                {
-        //                    while (reader.Read())
-        //                    {
-        //                        textBoxID.Text = reader["Id"].ToString();
-        //                        textBoxNombre.Text = reader["Nobre"].ToString();
-        //                        textBoxApellidos.Text = reader["Appellidos"].ToString();
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    MessageBox.Show("No se encontro nada");
-        //                }
-
-
-        //            }
-        //        }
-        //        catch (Exception error)
-        //        {
-        //            MessageBox.Show(error.Message);
-        //        }
-
-        //    }
-        //}
-
-        //private void button4_Click(object sender, EventArgs e)
-        //{
-        //    
-        //}
-
-        //private void button5_Click(object sender, EventArgs e)
-        //{
-
-        //        try
-        //        {
-        //            var query = new StringBuilder();
-        //            query.Append(" SELECT  ");
-        //            query.Append("Id,Nombre,Appellidos");
-        //            query.Append(" FROM MITABLA ");
-        //            query.Append(" WHERE Id=@Id ");
-
-        //                commando.Parameters.AddWithValue("@Id", textBoxID.Text);
-        //                conexion.Open();
-
-        //                SQLiteDataAdapter da = new SQLiteDataAdapter();
-
-        //                da.SelectCommand = commando;
-
-        //                DataTable dt = new DataTable();
-
-        //                da.Fill(dt);
-
-        //                dataGridView1.DataSource = dt;
-
-        //                conexion.Close();
-
-        //            }
-        //        }
-        //        catch (Exception error)
-        //        {
-        //            MessageBox.Show(error.Message);
-        //        }
-
-        //    }
-        //}
 
         public void LeerDatos(string tabla)
         {
@@ -213,17 +121,19 @@ namespace EditableDataTable
                 while (reader.Read())
                 {
                     childPanel.RowCount = childPanel.RowCount + 1;
-                    childPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                    childPanel.RowStyles.Add(new RowStyle(SizeType.Percent));
                     var values = new Dictionary<string, object>();
                     for (int i = 0; i < _totalColumns.Count; i++)
                     {
                         values.Add(_totalColumns.ElementAt(i), reader[_totalColumns.ElementAt(i)]);
-                        childPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 5));
-                        childPanel.Controls.Add(new Label
-                        {
-                            Font = new Font("Microsoft Sans Serif", 12F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0))),
-                            Size = new Size(70, 25),
-                            Dock = DockStyle.Fill,
+                        childPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+						childPanel.Controls.Add(new RichTextBox
+						{
+							Font = new Font("Microsoft Sans Serif", 8F, FontStyle.Bold, GraphicsUnit.Point, ((byte)(0))),
+							Dock = DockStyle.Fill,
+							Enabled = false,
+							BorderStyle = BorderStyle.None,
+			
                             Text = (string)Convert.ChangeType(reader[_totalColumns.ElementAt(i)],Nullable.GetUnderlyingType(typeof(string))??typeof(string))
                         }, i + 1, childPanel.RowCount-1);
 
@@ -231,15 +141,16 @@ namespace EditableDataTable
                    
                     var editbutton = new Button();
               
-                    editbutton.BackColor = System.Drawing.Color.DarkOrchid;
+                    editbutton.BackColor = System.Drawing.Color.Green;
                     editbutton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                    editbutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                    
-                    editbutton.Size = new System.Drawing.Size(100,30);
+					editbutton.ForeColor = System.Drawing.Color.WhiteSmoke;
+					editbutton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                    //
+                   
                     editbutton.Text = "Editar";
                     editbutton.UseVisualStyleBackColor = false;
-                    
-                    editbutton.Tag = values;
+					editbutton.Dock = DockStyle.Top;
+					editbutton.Tag = values;
                     editbutton.Click += EditClick;
 
                     var deletebtn = new Button();
@@ -247,17 +158,24 @@ namespace EditableDataTable
                     deletebtn.BackColor = System.Drawing.Color.Red;
                     deletebtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
                     deletebtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                    deletebtn.Size = new System.Drawing.Size(100, 30);
-
-                    deletebtn.Text = "Delete";
+					deletebtn.Dock = DockStyle.Top;
+			
+					deletebtn.ForeColor = System.Drawing.Color.WhiteSmoke;
+					
+					deletebtn.Text = "Borrar";
                     deletebtn.UseVisualStyleBackColor = false;
                     
                     deletebtn.Tag = values;
                     deletebtn.Click += DeleteClick;
 
-                    var p = new FlowLayoutPanel();
-                    p.Controls.Add(deletebtn);
-                    p.Controls.Add(editbutton);
+                    var p = new TableLayoutPanel();
+					p.RowCount = 1;
+					p.ColumnCount = 2;
+					p.Dock = DockStyle.Fill;
+					p.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+					p.ColumnStyles.Add(new ColumnStyle(SizeType.Percent));
+					p.Controls.Add(deletebtn,0,0);
+                    p.Controls.Add(editbutton,1,0);
                     childPanel.Controls.Add(p, 0, childPanel.RowCount - 1);
                 }
                 reader.Close();
@@ -272,16 +190,17 @@ namespace EditableDataTable
                 createPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 85));
                 createPanel.AutoScroll = true;
                 createPanel.RowCount = 1;
-                createPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                createPanel.RowStyles.Add(new RowStyle(SizeType.Percent));
                 var createbtn = new Button();
                 //editbutton.Tag = 
-                createbtn.BackColor = System.Drawing.Color.DarkOrchid;
+                createbtn.BackColor = System.Drawing.Color.Transparent;
                 createbtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-                createbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-                createbtn.Size = new System.Drawing.Size(118, 42);
-                createbtn.Text = "Crear";
-                createbtn.Dock = DockStyle.Fill;
-                createbtn.UseVisualStyleBackColor = false;
+                createbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                createbtn.Size = new System.Drawing.Size(60, 35);
+                createbtn.Text = "+";
+				
+				createbtn.ForeColor = Color.Black;
+				createbtn.UseVisualStyleBackColor = false;
                 createbtn.Click += CreateClick;
                 createPanel.Controls.Add(createbtn,0,0);
                 createPanel.Controls.Add(emptyPanel, 1, 0);

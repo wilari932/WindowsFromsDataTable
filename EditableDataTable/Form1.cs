@@ -35,10 +35,10 @@ namespace EditableDataTable
         private void MostraVentanaCrear(object sender, EventArgs e)
         {
             
-            var ventana = new Crear(tabla);
-            this.panel1.Controls.Remove(tabla);
+            var ventana = new Crear();
             ventana.ShowDialog();
-            tabla.LeerDatos("Test");
+			this.panel1.Controls.Remove(tabla);
+			tabla.LeerDatos("Test");
             this.panel1.Controls.Add(tabla);
         }
 
